@@ -40,5 +40,10 @@ export default class ApiClient {
         return response.data;
     }
 
+    async deleteDepartment(departmentToDelete: DepartmentResponse): Promise<String> {
+        const response: AxiosResponse<String> = await axios.delete(`${this.baseURL}/department/${departmentToDelete.id}`);
+        return response.data;
+    }
+
 }
 

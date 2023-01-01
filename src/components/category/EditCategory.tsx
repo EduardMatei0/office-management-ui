@@ -4,9 +4,9 @@ import {
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import {COLORS} from "../system/colors";
-import {DepartmentResponse} from "../model/DepartmentResponse";
-import {CategoryResponse} from "../model/CategoryResponse";
+import {COLORS} from "../../system/colors";
+import {DepartmentResponse} from "../../model/DepartmentResponse";
+import {CategoryResponse} from "../../model/CategoryResponse";
 import AddOrEditCategoryDialog from "./AddOrEditCategoryDialog";
 
 interface EditCategoryProps {

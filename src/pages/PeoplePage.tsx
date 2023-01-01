@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Box, ThemeProvider} from "@mui/material";
-import PeopleTable from "../components/PeopleTable";
-import AddPeople from "../components/AddPeople";
+import PeopleTable from "../components/people/PeopleTable";
+import AddPeople from "../components/people/AddPeople";
 import {theme} from "../system/colors";
 import {PeopleResponse} from "../model/PeopleResponse";
 import {Dispatch, SetStateAction} from "react";

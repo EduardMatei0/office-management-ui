@@ -3,10 +3,10 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {PeopleResponse} from "../model/PeopleResponse";
+import {PeopleResponse} from "../../model/PeopleResponse";
 import EditIcon from '@mui/icons-material/Edit';
 import AddOrEditPeopleDialog from "./AddOrEditPeopleDialog";
-import {COLORS} from "../system/colors";
+import {COLORS} from "../../system/colors";
 
 interface EditPeopleProps {
     setPeople: Dispatch<SetStateAction<PeopleResponse[]>>,

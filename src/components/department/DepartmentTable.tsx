@@ -8,14 +8,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import MultipleDataCell from "./MultipleDataCell";
+import MultipleDataCell from "../MultipleDataCell";
 import {styled, TablePagination} from "@mui/material";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {COLORS} from "../system/colors";
-import {DepartmentResponse} from "../model/DepartmentResponse";
-import EditCategory from "./EditCategory";
-import DeleteCategory from "./DeleteCategory";
+import {COLORS} from "../../system/colors";
+import {DepartmentResponse} from "../../model/DepartmentResponse";
+import EditCategory from "../category/EditCategory";
+import DeleteCategory from "../category/DeleteCategory";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '& td': {
@@ -28,9 +28,6 @@ interface DepartmentTableProps {
     setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>
 }
 
-const deleteCategory = (test: string) => {
-    console.log(test);
-}
 
 const DepartmentTable = (props: DepartmentTableProps) => {
     const {department, setDepartments} = props;
@@ -62,7 +59,9 @@ const DepartmentTable = (props: DepartmentTableProps) => {
                             .map((category) => (
                                 <StyledTableRow key={category.name}>
                                     <TableCell >{category.name}</TableCell>
-                                    <TableCell >No leader</TableCell>
+                                    <TableCell >
+                                        {department.leaders.length !== 0 ? <MultipleDataCell list={department.leaders.map(people => people.name)} /> : 'None'}
+                                    </TableCell>
                                     <TableCell >
                                         {category.peopleList.length !== 0 ? <MultipleDataCell list={category.peopleList.map(people => people.name)} /> : 'None'}
                                     </TableCell>

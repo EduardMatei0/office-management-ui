@@ -4,9 +4,9 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {COLORS} from "../system/colors";
+import {COLORS} from "../../system/colors";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
-import {DepartmentResponse} from "../model/DepartmentResponse";
+import {DepartmentResponse} from "../../model/DepartmentResponse";
 import AddOrEditCategoryDialog from "./AddOrEditCategoryDialog";
 
 interface AddCategoryProps {

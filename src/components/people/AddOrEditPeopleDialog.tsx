@@ -1,13 +1,13 @@
 import {Box, Button, Dialog, DialogTitle, InputAdornment, TextField} from "@mui/material";
 import {AccountCircle, ArrowBack, Email, Save, Smartphone} from "@mui/icons-material";
-import {COLORS} from "../system/colors";
+import {COLORS} from "../../system/colors";
 import toast from "react-hot-toast";
 import * as React from "react";
-import useDepartments from "../hooks/useDepartments";
+import useDepartments from "../../hooks/useDepartments";
 import {Dispatch, SetStateAction, useState} from "react";
-import {PeopleResponse} from "../model/PeopleResponse";
+import {PeopleResponse} from "../../model/PeopleResponse";
 import {components, CSSObjectWithLabel, default as ReactSelect} from "react-select";
-import ApiClient from "../services/ApiClient";
+import ApiClient from "../../services/ApiClient";
 import {AxiosError} from "axios";
 
 interface AddOrEditPeopleDialogProps {

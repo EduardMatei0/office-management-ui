@@ -5,13 +5,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import MultipleDataCell from "./MultipleDataCell";
+import MultipleDataCell from "../MultipleDataCell";
 import {styled, TablePagination} from "@mui/material";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {COLORS} from "../system/colors";
-import {PeopleResponse} from "../model/PeopleResponse";
-import {Edit} from '@mui/icons-material';
+import {COLORS} from "../../system/colors";
+import {PeopleResponse} from "../../model/PeopleResponse";
 import EditPeople from "./EditPeople";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({

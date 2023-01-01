@@ -4,8 +4,8 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {PeopleResponse} from "../model/PeopleResponse";
-import {COLORS} from "../system/colors";
+import {PeopleResponse} from "../../model/PeopleResponse";
+import {COLORS} from "../../system/colors";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 import AddOrEditPeopleDialog from "./AddOrEditPeopleDialog";
 

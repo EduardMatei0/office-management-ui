@@ -1,24 +1,22 @@
 import {Box, Button, Dialog, DialogTitle, InputAdornment, TextField} from "@mui/material";
 import {AccountCircle, ArrowBack,Save} from "@mui/icons-material";
-import {COLORS} from "../system/colors";
+import {COLORS} from "../../system/colors";
 import toast from "react-hot-toast";
 import * as React from "react";
 import {Dispatch, SetStateAction, useState} from "react";
-import {PeopleResponse} from "../model/PeopleResponse";
+import {PeopleResponse} from "../../model/PeopleResponse";
 import {components, CSSObjectWithLabel, default as ReactSelect} from "react-select";
-import ApiClient from "../services/ApiClient";
+import ApiClient from "../../services/ApiClient";
 import {AxiosError} from "axios";
-import {DepartmentResponse} from "../model/DepartmentResponse";
-import {CategoryResponse} from "../model/CategoryResponse";
-import {usePeopleContext} from "../context/PeopleContext";
-import {ErrorResponse} from "../model/ErrorResponse";
+import {DepartmentResponse} from "../../model/DepartmentResponse";
+import {usePeopleContext} from "../../context/PeopleContext";
+import {ErrorResponse} from "../../model/ErrorResponse";
 
-interface AddOrEditCategoryDialogProps {
+interface AddOrEditDepartmentDialogProps {
     setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
-    currentDepartment: DepartmentResponse,
     open: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>,
-    editCategory?: CategoryResponse,
+    editDepartment?: DepartmentResponse,
     edit?: boolean,
 }
 
@@ -44,61 +42,78 @@ const reactSelectStyles = (baseStyles: CSSObjectWithLabel) => ({
     borderColor: COLORS.GREEN,
 })
 
-const isValidForm = (category: CategoryResponse) => {
-    return category.name.length > 0;
+const isValidForm = (department: DepartmentResponse) => {
+    return department.name.length > 0;
 }
 
 
-const addOrEditCategory = (category: CategoryResponse,
-                   department: DepartmentResponse,
-                   setCategory: Dispatch<SetStateAction<CategoryResponse>>,
-                   setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
-                   setOpen: Dispatch<SetStateAction<boolean>>) => {
+const addDepartmentApi = (department: DepartmentResponse,
+                             setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
+                             setOpen: Dispatch<SetStateAction<boolean>>) => {
     const api = new ApiClient();
-    if (category.id) {
-        department.categories[department.categories.findIndex(c => c.id === category.id)] = category;
-    } else {
-        department.categories.push(category);
-    }
-    toast.promise(api.editDepartment(department), {
+
+    toast.promise(api.saveDepartment(department), {
         loading: 'Saving...',
         success: result => {
             setDepartments((prevState:DepartmentResponse[]) => {
-                const newState = prevState.map(item => item);
-                const selectedIndex = newState.findIndex(department => department.name === result.name);
-                newState[selectedIndex] = result;
-                setCategory(!category.id ? createDefaultCategory() : category);
                 setOpen(false);
-                return newState;
+                return [...prevState, result];
             });
-            return 'Category added succesfully';
+            return 'Department added successfully';
         },
         error: (error:AxiosError<ErrorResponse>) => {
             console.log(error.response);
-            if (error.response?.status === 409) return error.response.data.message;
+            if (error.response) return error.response.data.exceptionMessage;
             return 'An error has occured';
         }
     });
 }
 
-const createDefaultCategory = (): CategoryResponse => {
+const editDepartmentApi = (department: DepartmentResponse,
+                        setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
+                        setOpen: Dispatch<SetStateAction<boolean>>) => {
+    const api = new ApiClient();
+
+    toast.promise(api.editDepartment(department), {
+        loading: 'Updating...',
+        success: result => {
+            setDepartments((prevState:DepartmentResponse[]) => {
+                const newState = prevState.map(item => item);
+                const selectedIndex = newState.findIndex(department => department.name === result.name);
+                newState[selectedIndex] = result;
+                setOpen(false);
+                return newState;
+            });
+            return 'Department updated successfully';
+        },
+        error: (error:AxiosError<ErrorResponse>) => {
+            console.log(error.response);
+            if (error.response) return error.response.data.exceptionMessage;
+            return 'An error has occured';
+        }
+    });
+}
+
+const createDefaultDepartment = (): DepartmentResponse => {
     return {
         name: "",
-        peopleList: [],
-        peopleIds: []
+        leaders: [],
+        leadersIds: [],
+        categories: []
     };
 };
 
-const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
-    const {setDepartments, currentDepartment, open, setOpen, editCategory, edit} = props;
+const AddOrEditDepartmentDialog = (props: AddOrEditDepartmentDialogProps) => {
+    const {setDepartments,open, setOpen, editDepartment, edit} = props;
     const people = usePeopleContext();
     const [clicked, setClicked] = useState(false);
-    const [categoryToUpdate, setCategoryToUpdate] = useState<CategoryResponse>(edit && editCategory ? editCategory : createDefaultCategory());
-    const categoryPeople = people
-        .filter(people => categoryToUpdate.peopleIds.includes(people.id));
+    const [departmentToUpdate, setDepartmentToUpdate] = useState<DepartmentResponse>(edit && editDepartment ? editDepartment : createDefaultDepartment());
+    if (editDepartment && editDepartment.name !== departmentToUpdate.name) setDepartmentToUpdate(editDepartment);
+    const leaderPeople = people
+        .filter(people => departmentToUpdate.leadersIds.includes(people.id));
     return (<Dialog open={open}>
         <Box sx={{minWidth: '500px'}}>
-            <DialogTitle sx={{textAlign: 'center'}}>{edit ? 'Update' : 'Add New'} Category</DialogTitle>
+            <DialogTitle sx={{textAlign: 'center'}}>{edit ? 'Update' : 'Add New'} Department</DialogTitle>
             <Box sx={{
                 width: '100%',
                 padding: '20px',
@@ -108,9 +123,9 @@ const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
                 <TextField
                     id="name"
                     label="Name"
-                    error={clicked && categoryToUpdate.name.length < 1}
+                    error={clicked && departmentToUpdate.name.length < 1}
                     variant="outlined"
-                    defaultValue={categoryToUpdate.name}
+                    defaultValue={departmentToUpdate.name}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -118,8 +133,8 @@ const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
                             </InputAdornment>
                         ),
                     }}
-                    onChange={(e) => setCategoryToUpdate({
-                        ...categoryToUpdate,
+                    onChange={(e) => setDepartmentToUpdate({
+                        ...departmentToUpdate,
                         name: e.target.value
                     })
                     }/>
@@ -127,15 +142,15 @@ const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
                     key={`unique_key_peoples`}
                     options={convertToArrayOptions(people)}
                     isMulti
-                    value={convertToArrayOptions(categoryPeople)}
+                    value={convertToArrayOptions(leaderPeople)}
                     closeMenuOnSelect={false}
                     hideSelectedOptions={false}
                     components={{Option}}
-                    onChange={(items) => setCategoryToUpdate({
-                        ...categoryToUpdate,
-                        peopleIds: items ? items.map(i => i.value.id) : []
+                    onChange={(items) => setDepartmentToUpdate({
+                        ...departmentToUpdate,
+                        leadersIds: items ? items.map(i => i.value.id) : []
                     })}
-                    placeholder={'Add People'}
+                    placeholder={'Add Leaders'}
                     styles={{
                         control: reactSelectStyles,
                     }}
@@ -153,8 +168,10 @@ const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
                         variant="contained"
                         onClick={() => {
                             setClicked(true);
-                            if (isValidForm(categoryToUpdate)) {
-                                addOrEditCategory(categoryToUpdate, currentDepartment, setCategoryToUpdate,setDepartments, setOpen);
+                            if (isValidForm(departmentToUpdate)) {
+                                edit ?
+                                    editDepartmentApi(departmentToUpdate,setDepartments, setOpen) :
+                                    addDepartmentApi(departmentToUpdate, setDepartments, setOpen)
                                 setClicked(false);
                             } else {
                                 toast.error('Please fix errors', {duration: 3000});
@@ -169,4 +186,4 @@ const AddOrEditCategoryDialog = (props: AddOrEditCategoryDialogProps) => {
     </Dialog>);
 }
 
-export default AddOrEditCategoryDialog;
+export default AddOrEditDepartmentDialog;
