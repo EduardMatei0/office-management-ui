@@ -11,7 +11,6 @@ import AddCategory from "../components/category/AddCategory";
 const DepartmentPage = () => {
     const [departments, setDepartments] = useDepartments();
     const [value, setValue] = useState(0);
-    const departmentNames = departments.map(department => department.name);
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{margin: '0 auto'}}>
@@ -20,7 +19,7 @@ const DepartmentPage = () => {
                     setValue={setValue}
                     setDepartments={setDepartments}
                     currentDepartment={departments[value]}
-                    departmentNames={departmentNames} />
+                    departmentNames={departments.map(department => department.name)} />
                 {departments[value] && (
                     <React.Fragment>
                         <Box sx={{padding: '2rem'}}>

@@ -6,7 +6,7 @@ import AddHomeIcon from "@mui/icons-material/AddHome";
 import AddOrEditDepartmentDialog from "./AddOrEditDepartmentDialog";
 
 interface AddDepartmentProps {
-    setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
+    setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>
 }
 
 const AddDepartment = (props: AddDepartmentProps) => {
@@ -19,6 +19,7 @@ const AddDepartment = (props: AddDepartmentProps) => {
                 open={open}
                 setOpen={setOpen} />
             <Tab
+                value={0}
                 icon={<AddHomeIcon />}
                 iconPosition="end"
                 label="New"

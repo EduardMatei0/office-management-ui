@@ -51,6 +51,7 @@ const DeleteDepartment = (props: DeleteDepartmentProps) => {
                            setOpen={setOpen}
                            setConfirm={setConfirm} />
             <Tab
+                value={2}
                 icon={<DeleteIcon />}
                 iconPosition="end"
                 label="Delete"

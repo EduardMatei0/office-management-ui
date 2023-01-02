@@ -30,9 +30,9 @@ const DepartmentNavBar = (props: DepartmentNavBarProps) => {
                     <Tab key={index} value={index} label={departmentName} />
                 ))}
             </Tabs>)}
-            <Tabs textColor="inherit" aria-label="basic tabs example" centered>
+            <Tabs textColor="inherit" aria-label="basic tabs example" centered value={value}>
                 <AddDepartment setDepartments={setDepartments}/>
-                {currentDepartment && (<EditDepartment currentDepartment={currentDepartment} setDepartments={setDepartments}/>)}
+                {currentDepartment && (<EditDepartment currentDepartment={currentDepartment} setDepartments={setDepartments} />)}
                 {currentDepartment && (<DeleteDepartment currentDepartment={currentDepartment} setDepartments={setDepartments}/>)}
             </Tabs>
         </Box>

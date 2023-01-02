@@ -17,7 +17,7 @@ interface AddOrEditDepartmentDialogProps {
     open: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>,
     editDepartment?: DepartmentResponse,
-    edit?: boolean,
+    edit?: boolean
 }
 
 const Option = (props: any) => {
@@ -71,6 +71,7 @@ const addDepartmentApi = (department: DepartmentResponse,
 
 const editDepartmentApi = (department: DepartmentResponse,
                         setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
+                        setDepartmentToUpdate: Dispatch<SetStateAction<DepartmentResponse>>,
                         setOpen: Dispatch<SetStateAction<boolean>>) => {
     const api = new ApiClient();
 
@@ -79,9 +80,10 @@ const editDepartmentApi = (department: DepartmentResponse,
         success: result => {
             setDepartments((prevState:DepartmentResponse[]) => {
                 const newState = prevState.map(item => item);
-                const selectedIndex = newState.findIndex(department => department.name === result.name);
+                const selectedIndex = newState.findIndex(department => department.id === result.id);
                 newState[selectedIndex] = result;
                 setOpen(false);
+                setDepartmentToUpdate(result);
                 return newState;
             });
             return 'Department updated successfully';
@@ -108,7 +110,7 @@ const AddOrEditDepartmentDialog = (props: AddOrEditDepartmentDialogProps) => {
     const people = usePeopleContext();
     const [clicked, setClicked] = useState(false);
     const [departmentToUpdate, setDepartmentToUpdate] = useState<DepartmentResponse>(edit && editDepartment ? editDepartment : createDefaultDepartment());
-    if (editDepartment && editDepartment.name !== departmentToUpdate.name) setDepartmentToUpdate(editDepartment);
+    if (editDepartment && editDepartment.id !== departmentToUpdate.id) setDepartmentToUpdate(editDepartment);
     const leaderPeople = people
         .filter(people => departmentToUpdate.leadersIds.includes(people.id));
     return (<Dialog open={open}>
@@ -170,8 +172,15 @@ const AddOrEditDepartmentDialog = (props: AddOrEditDepartmentDialogProps) => {
                             setClicked(true);
                             if (isValidForm(departmentToUpdate)) {
                                 edit ?
-                                    editDepartmentApi(departmentToUpdate,setDepartments, setOpen) :
-                                    addDepartmentApi(departmentToUpdate, setDepartments, setOpen)
+                                    editDepartmentApi(
+                                        departmentToUpdate,
+                                        setDepartments,
+                                        setDepartmentToUpdate,
+                                        setOpen) :
+                                    addDepartmentApi(
+                                        departmentToUpdate,
+                                        setDepartments,
+                                        setOpen)
                                 setClicked(false);
                             } else {
                                 toast.error('Please fix errors', {duration: 3000});

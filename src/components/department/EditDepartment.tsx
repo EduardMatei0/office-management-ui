@@ -23,6 +23,7 @@ const EditDepartment = (props: EditDepartmentProps) => {
                 editDepartment={currentDepartment}
             />
             <Tab
+                value={1}
                 icon={<EditIcon />}
                 iconPosition="end"
                 label="Edit"
