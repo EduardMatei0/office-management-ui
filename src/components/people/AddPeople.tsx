@@ -19,7 +19,7 @@ const AddPeople = (props: AddPeopleProps) => {
     return (
         <React.Fragment>
             <AddOrEditPeopleDialog setPeople={setPeople} open={open} setOpen={setOpen} />
-            <Box sx={{display: 'flex', marginBottom: '15px', color: COLORS.GREEN}}>
+            <Box sx={{display: 'flex', marginBottom: '15px', marginRight: '10px', color: COLORS.GREEN}}>
                 <Fab color="inherit" aria-label="add" onClick={() => setOpen(true)}>
                     <PersonAddRoundedIcon />
                 </Fab>

@@ -3,13 +3,18 @@ import {theme} from "../system/colors";
 import * as React from "react";
 import useDepartments from "../hooks/useDepartments";
 import DepartmentNavBar from "../components/department/DepartmentNavBar";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import DepartmentTable from "../components/department/DepartmentTable";
 import AddCategory from "../components/category/AddCategory";
+import {DepartmentResponse} from "../model/DepartmentResponse";
 
+interface DepartmentPageProps {
+    departments: DepartmentResponse[],
+    setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>
+}
 
-const DepartmentPage = () => {
-    const [departments, setDepartments] = useDepartments();
+const DepartmentPage = (props: DepartmentPageProps) => {
+    const {departments, setDepartments} = props;
     const [value, setValue] = useState(0);
     return (
         <ThemeProvider theme={theme}>
