@@ -9,9 +9,13 @@ import MainTitle from "../components/MainTitle";
 import NavBar from "../components/NavBar";
 import PeoplePage from "./PeoplePage";
 import DepartmentPage from "./DepartmentPage";
+import {useNavigate} from "react-router-dom";
+import {getCurrentUser} from "../services/authService";
 
 
 const HomePage = () => {
+    const navigate = useNavigate();
+    if (!getCurrentUser()) navigate("/login");
     const [value, setValue] = useState('1');
     const [applyFilter, setApplyFilter] = useState<boolean>( false);
     const [filterForm, setFilterForm] = useState<FilterForm>({

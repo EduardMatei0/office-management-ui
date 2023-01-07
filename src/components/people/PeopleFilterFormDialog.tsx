@@ -60,7 +60,7 @@ const PeopleFilterFormDialog = (props: PeopleFilterFormProps) => {
     return (
         <Dialog open={open}>
             <Box sx={{minWidth: '500px'}}>
-                <DialogTitle sx={{textAlign: 'center'}}>Search by fields</DialogTitle>
+                <DialogTitle sx={{textAlign: 'center'}}>Advanced Search</DialogTitle>
                 <Box sx={{
                     width: '100%',
                     padding: '20px',

@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import ApiClient from "../services/ApiClient";
 import toast from "react-hot-toast";
 import {FilterForm} from "../model/FilterForm";
+import {handleError} from "../services/handleErrorService";
 
 
 const usePeopleSearch = (applyFilter: boolean, filterForm: FilterForm): [PeopleResponse[], Dispatch<SetStateAction<PeopleResponse[]>>] => {
@@ -17,7 +18,7 @@ const usePeopleSearch = (applyFilter: boolean, filterForm: FilterForm): [PeopleR
         toast.promise(fetchPeopleList(), {
             loading: 'Getting people...',
             success: 'People retrieved..',
-            error: 'An error has occured'
+            error: handleError
         });
     }, [applyFilter]);
 

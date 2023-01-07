@@ -5,9 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {DepartmentResponse} from "../../model/DepartmentResponse";
 import ConfirmDialog from "../ConfirmDialog";
 import toast from "react-hot-toast";
-import {AxiosError} from "axios";
-import {ErrorResponse} from "../../model/ErrorResponse";
 import ApiClient from "../../services/ApiClient";
+import {handleError} from "../../services/handleErrorService";
 
 interface DeleteDepartmentProps {
     setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
@@ -28,11 +27,7 @@ const deleteDepartment = (setDepartments: Dispatch<SetStateAction<DepartmentResp
             });
             return 'Department deleted successfully';
         },
-        error: (error:AxiosError<ErrorResponse>) => {
-            console.log(error.response);
-            if (error.response?.status === 409) return error.response.data.exceptionMessage;
-            return 'An error has occured';
-        }
+        error: handleError
     });
 
     setConfirm(false);

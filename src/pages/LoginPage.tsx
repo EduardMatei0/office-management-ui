@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -19,6 +18,7 @@ import {ErrorResponse} from "../model/ErrorResponse";
 import {useState} from "react";
 import {isValidEmail} from "../services/validationService";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import Link from "@mui/material/Link";
 
 const Copyright = (props: any) => {
     return (
@@ -43,16 +43,12 @@ const loginSubmit = (email: string,
     toast.promise(loginUser(email, password), {
         loading: 'Logging in...',
         success: result => {
-            console.log(result);
             localStorage.setItem("user", JSON.stringify(result));
             navigate("/");
-            return 'Welcome back';
+            return `Welcome back ${result.username} !`;
         },
         error: (error:AxiosError<ErrorResponse>) => {
-            if(error.response) {
-                console.log(error.response.data);
-                return error.response.data.exceptionMessage;
-            }
+            if(error.response) return error.response.data.message;
             return "Unknown error";
         }
     })

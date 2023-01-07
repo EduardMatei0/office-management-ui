@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './Main.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -9,12 +9,16 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import {Toaster} from "react-hot-toast";
+import AuthenticatedRoute from "./components/GuardedRoute";
 
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <HomePage />,
+        element:
+            <AuthenticatedRoute>
+                <HomePage />
+            </AuthenticatedRoute>
     },
     {
         path: "/login",

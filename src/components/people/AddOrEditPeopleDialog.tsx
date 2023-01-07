@@ -10,6 +10,9 @@ import {components, CSSObjectWithLabel, default as ReactSelect} from "react-sele
 import ApiClient from "../../services/ApiClient";
 import {AxiosError} from "axios";
 import {isValidEmail, isValidPhoneNumber} from "../../services/validationService";
+import {ErrorResponse} from "../../model/ErrorResponse";
+import {handleError} from "../../services/handleErrorService";
+import {usePeopleContext} from "../../context/PeopleContext";
 
 interface AddOrEditPeopleDialogProps {
     setPeople: Dispatch<SetStateAction<PeopleResponse[]>>,
@@ -49,6 +52,7 @@ const isValidForm = (person: PeopleResponse) => {
 const addPerson = (person: PeopleResponse,
                    setPerson: Dispatch<SetStateAction<PeopleResponse>>,
                    setPeople: Dispatch<SetStateAction<PeopleResponse[]>>,
+                   allPeople: PeopleResponse[],
                    setOpen: Dispatch<SetStateAction<boolean>>) => {
     const api = new ApiClient();
     toast.promise(api.savePeople(person), {
@@ -57,16 +61,14 @@ const addPerson = (person: PeopleResponse,
             setPeople((prevState:PeopleResponse[]) => {
                 const newState = prevState.map(item => item);
                 newState.push(result);
+                allPeople.push(result);
                 setPerson(createDefaultPerson());
                 setOpen(false);
                 return newState;
             });
             return 'People added successfully';
         },
-        error: (error:AxiosError) => {
-            if (error.response?.status === 409) return `User with ${person.email} already exists.`;
-            return 'An error has occured';
-        }
+        error: handleError
     });
 }
 
@@ -91,10 +93,7 @@ const updatePerson = (person: PeopleResponse,
             });
             return 'People updated succesfully';
         },
-        error: (error:AxiosError) => {
-            if (error.response?.status === 409) return `User with ${person.email} already exists.`;
-            return 'An error has occured';
-        }
+        error: handleError
     });
 }
 
@@ -113,6 +112,7 @@ const AddOrEditPeopleDialog = (props: AddOrEditPeopleDialogProps) => {
     const {setPeople, open, setOpen, editPerson, edit} = props;
     const [departments] = useDepartments();
     const [clicked, setClicked] = useState(false);
+    const allPeople = usePeopleContext();
     const [personToUpdate, setPersonToUpdate] = useState<PeopleResponse>(edit && editPerson ? editPerson : createDefaultPerson());
     const ministries = departments
         .filter(department => personToUpdate.departments.includes(department.name))
@@ -228,7 +228,7 @@ const AddOrEditPeopleDialog = (props: AddOrEditPeopleDialogProps) => {
                             if (isValidForm(personToUpdate)) {
                                 edit && editPerson ?
                                     updatePerson(personToUpdate, setPeople, setOpen) :
-                                    addPerson(personToUpdate, setPersonToUpdate, setPeople, setOpen);
+                                    addPerson(personToUpdate, setPersonToUpdate, setPeople, allPeople, setOpen);
                                 setClicked(false);
                             } else {
                                 toast.error('Please fix errors', {duration: 3000});

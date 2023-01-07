@@ -1,6 +1,6 @@
 export interface ErrorResponse {
     error: string,
-    exceptionMessage: string,
+    message: string,
     path: string,
     status: number,
     timestamp: string

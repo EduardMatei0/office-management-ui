@@ -2,6 +2,7 @@ import {PeopleResponse} from "../model/PeopleResponse";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import ApiClient from "../services/ApiClient";
 import toast from "react-hot-toast";
+import {handleError} from "../services/handleErrorService";
 
 
 const usePeople = (): [PeopleResponse[], Dispatch<SetStateAction<PeopleResponse[]>>] => {
@@ -16,7 +17,7 @@ const usePeople = (): [PeopleResponse[], Dispatch<SetStateAction<PeopleResponse[
         toast.promise(fetchPeopleList(), {
             loading: 'Getting people...',
             success: 'People retrieved..',
-            error: 'An error has occured'
+            error: handleError
         });
     }, []);
 

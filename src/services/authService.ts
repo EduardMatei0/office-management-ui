@@ -27,11 +27,23 @@ export const logout = () => {
     localStorage.removeItem("user");
 };
 
-export const getCurrentUser = (): string | null => {
+export const getCurrentUser = (): JwtResponse | null => {
     const userFromStorage = localStorage.getItem("user");
     if (userFromStorage) return JSON.parse(userFromStorage);
     return null;
 };
+
+export const hasStaffRole = (): boolean => {
+    const user = getCurrentUser();
+    if (!user) return false;
+    return user && (user.roles.includes('ROLE_STAFF') || user.roles.includes('ROLE_ADMIN'));
+}
+
+export const hasAdminRole = (): boolean => {
+    const user = getCurrentUser();
+    if (!user) return false;
+    return user && (user.roles.includes('ROLE_ADMIN'));
+}
 
 
 

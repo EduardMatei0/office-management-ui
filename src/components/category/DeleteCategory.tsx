@@ -7,9 +7,8 @@ import {DepartmentResponse} from "../../model/DepartmentResponse";
 import {CategoryResponse} from "../../model/CategoryResponse";
 import ConfirmDialog from "../ConfirmDialog";
 import toast from "react-hot-toast";
-import {AxiosError} from "axios";
-import {ErrorResponse} from "../../model/ErrorResponse";
 import ApiClient from "../../services/ApiClient";
+import {handleError} from "../../services/handleErrorService";
 
 interface DeleteCategoryProps {
     setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
@@ -35,11 +34,7 @@ const deleteCategory = (categoryToDelete: CategoryResponse,
             });
             return 'Category deleted successfully';
         },
-        error: (error:AxiosError<ErrorResponse>) => {
-            console.log(error.response);
-            if (error.response?.status === 409) return error.response.data.exceptionMessage;
-            return 'An error has occured';
-        }
+        error: handleError
     });
 
     setConfirm(false);

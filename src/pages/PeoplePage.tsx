@@ -8,6 +8,7 @@ import {Dispatch, SetStateAction} from "react";
 import {DepartmentResponse} from "../model/DepartmentResponse";
 import PeopleFilterForm from "../components/people/PeopleFilterForm";
 import {FilterForm} from "../model/FilterForm";
+import {hasStaffRole} from "../services/authService";
 
 interface PeopleProps {
     peopleList: PeopleResponse[],
@@ -31,7 +32,7 @@ const PeoplePage = (props: PeopleProps) => {
         <ThemeProvider theme={theme}>
             <Box sx={{margin: '0 auto', padding: '2rem'}}>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
-                    <AddPeople setPeople={setPeopleList}/>
+                    {hasStaffRole() && (<AddPeople setPeople={setPeopleList}/>)}
                     <PeopleFilterForm
                         setPeoples={setPeopleList}
                         peoples={peopleList}

@@ -12,6 +12,8 @@ import {Dispatch, SetStateAction, useState} from "react";
 import {COLORS} from "../../system/colors";
 import {PeopleResponse} from "../../model/PeopleResponse";
 import EditPeople from "./EditPeople";
+import {hasAdminRole, hasStaffRole} from "../../services/authService";
+import DeletePeople from "./DeletePeople";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '& td': {
@@ -44,9 +46,10 @@ const PeopleTable = (props: PeopleTableProps) => {
                             <TableCell>Full Name</TableCell>
                             <TableCell >Email</TableCell>
                             <TableCell >Phone Number</TableCell>
-                            <TableCell >Teams</TableCell>
-                            <TableCell >Ministries</TableCell>
-                            <TableCell >Edit</TableCell>
+                            <TableCell >Departments</TableCell>
+                            <TableCell >Sub-Departments</TableCell>
+                            {hasStaffRole() && (<TableCell >Edit</TableCell>)}
+                            {hasAdminRole() && (<TableCell >Delete</TableCell>)}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -63,9 +66,16 @@ const PeopleTable = (props: PeopleTableProps) => {
                                     <TableCell >
                                         {people.categories.length !== 0 ? <MultipleDataCell list={people.categories} /> : 'None'}
                                     </TableCell>
-                                    <TableCell>
-                                        <EditPeople setPeople={setPeopleList} peopleToEdit={people}/>
-                                    </TableCell>
+                                    {hasStaffRole() && (
+                                        <TableCell>
+                                            <EditPeople setPeople={setPeopleList} peopleToEdit={people}/>
+                                        </TableCell>
+                                    )}
+                                    {hasAdminRole() && (
+                                        <TableCell>
+                                            <DeletePeople setPeople={setPeopleList} peopleToDelete={people}/>
+                                        </TableCell>
+                                    )}
                                 </StyledTableRow>
                             ))}
                     </TableBody>

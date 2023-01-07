@@ -5,6 +5,7 @@ import AddDepartment from "./AddDepartment";
 import {DepartmentResponse} from "../../model/DepartmentResponse";
 import EditDepartment from "./EditDepartment";
 import DeleteDepartment from "./DeleteDepartment";
+import {hasAdminRole} from "../../services/authService";
 
 interface DepartmentNavBarProps {
     value: number,
@@ -33,7 +34,7 @@ const DepartmentNavBar = (props: DepartmentNavBarProps) => {
             <Tabs textColor="inherit" aria-label="basic tabs example" centered value={value}>
                 <AddDepartment setDepartments={setDepartments}/>
                 {currentDepartment && (<EditDepartment currentDepartment={currentDepartment} setDepartments={setDepartments} />)}
-                {currentDepartment && (<DeleteDepartment currentDepartment={currentDepartment} setDepartments={setDepartments}/>)}
+                {currentDepartment && hasAdminRole() && (<DeleteDepartment currentDepartment={currentDepartment} setDepartments={setDepartments}/>)}
             </Tabs>
         </Box>
     )

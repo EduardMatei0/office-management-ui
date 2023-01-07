@@ -7,11 +7,10 @@ import {Dispatch, SetStateAction, useState} from "react";
 import {PeopleResponse} from "../../model/PeopleResponse";
 import {components, CSSObjectWithLabel, default as ReactSelect} from "react-select";
 import ApiClient from "../../services/ApiClient";
-import {AxiosError} from "axios";
 import {DepartmentResponse} from "../../model/DepartmentResponse";
 import {CategoryResponse} from "../../model/CategoryResponse";
 import {usePeopleContext} from "../../context/PeopleContext";
-import {ErrorResponse} from "../../model/ErrorResponse";
+import {handleError} from "../../services/handleErrorService";
 
 interface AddOrEditCategoryDialogProps {
     setDepartments: Dispatch<SetStateAction<DepartmentResponse[]>>,
@@ -73,11 +72,7 @@ const addOrEditCategory = (category: CategoryResponse,
             });
             return 'Category added successfully';
         },
-        error: (error:AxiosError<ErrorResponse>) => {
-            console.log(error.response);
-            if (error.response?.status === 409) return error.response.data.exceptionMessage;
-            return 'An error has occured';
-        }
+        error: handleError
     });
 }
 
