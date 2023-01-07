@@ -8,6 +8,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import {Toaster} from "react-hot-toast";
 
 
 const router = createBrowserRouter([
@@ -26,7 +27,10 @@ const router = createBrowserRouter([
 ]);
 
 const Main = () => (
-    <RouterProvider router={router}/>
+    <React.Fragment>
+        <Toaster />
+        <RouterProvider router={router}/>
+    </React.Fragment>
 )
 
 export default Main;

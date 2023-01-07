@@ -5,7 +5,6 @@ import usePeople from "../hooks/usePeople";
 import useDepartments from "../hooks/useDepartments";
 import {PeopleContext} from "../context/PeopleContext";
 import {CssBaseline} from "@mui/material";
-import {Toaster} from "react-hot-toast";
 import MainTitle from "../components/MainTitle";
 import NavBar from "../components/NavBar";
 import PeoplePage from "./PeoplePage";
@@ -29,7 +28,6 @@ const HomePage = () => {
         <div className="App">
             <PeopleContext.Provider value={allPeople}>
                 <CssBaseline />
-                <Toaster />
                 <header >
                     <MainTitle />
                     <NavBar value={value} setValue={setValue} />

@@ -1,7 +1,6 @@
 import {Box, ThemeProvider} from "@mui/material";
 import {theme} from "../system/colors";
 import * as React from "react";
-import useDepartments from "../hooks/useDepartments";
 import DepartmentNavBar from "../components/department/DepartmentNavBar";
 import {Dispatch, SetStateAction, useState} from "react";
 import DepartmentTable from "../components/department/DepartmentTable";

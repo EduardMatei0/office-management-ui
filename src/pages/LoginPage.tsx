@@ -7,10 +7,18 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import {theme} from "../system/colors";
+import {loginUser} from "../services/authService";
+import toast from "react-hot-toast";
+import {AxiosError} from "axios";
+import {ErrorResponse} from "../model/ErrorResponse";
+import {useState} from "react";
+import {isValidEmail} from "../services/validationService";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 const Copyright = (props: any) => {
     return (
@@ -25,17 +33,43 @@ const Copyright = (props: any) => {
     );
 }
 
+const isValidForm = (loginForm: LoginForm) => {
+    return  isValidEmail(loginForm.email) && loginForm.password.length > 0;
+}
+
+const loginSubmit = (email: string,
+                      password: string,
+                     navigate: NavigateFunction) => {
+    toast.promise(loginUser(email, password), {
+        loading: 'Logging in...',
+        success: result => {
+            console.log(result);
+            localStorage.setItem("user", JSON.stringify(result));
+            navigate("/");
+            return 'Welcome back';
+        },
+        error: (error:AxiosError<ErrorResponse>) => {
+            if(error.response) {
+                console.log(error.response.data);
+                return error.response.data.exceptionMessage;
+            }
+            return "Unknown error";
+        }
+    })
+};
+
+interface LoginForm {
+    email: string,
+    password: string
+}
 
 const LoginPage = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-
+    const [clicked, setClicked] = useState(false);
+    const [loginForm, setLoginForm] = useState<LoginForm>({
+        email: "",
+        password: ""
+    })
+    const navigate = useNavigate();
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
@@ -54,32 +88,51 @@ const LoginPage = () => {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
+                            error={clicked && !isValidEmail(loginForm.email)}
                             id="email"
                             label="Email Address"
                             name="email"
                             autoComplete="email"
+                            onChange={(e) => setLoginForm({
+                                ...loginForm,
+                                email: e.target.value
+                            })}
                             autoFocus
                         />
                         <TextField
                             margin="normal"
                             required
                             fullWidth
+                            error={clicked && loginForm.password.length < 1}
                             name="password"
                             label="Password"
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={(e) => setLoginForm({
+                                ...loginForm,
+                                password: e.target.value
+                            })}
                         />
                         <Button
-                            type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            onClick={() => {
+                                setClicked(true);
+                                if (isValidForm(loginForm)) {
+                                    setClicked(false);
+                                    loginSubmit(loginForm.email, loginForm.password, navigate);
+                                } else {
+                                    toast.error('Please fix errors', {duration: 3000});
+                                }
+                            }}
+                            endIcon={<LockOpenIcon />}
                         >
                             Sign In
                         </Button>

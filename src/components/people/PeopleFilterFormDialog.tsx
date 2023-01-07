@@ -3,12 +3,10 @@ import * as React from "react";
 import {COLORS} from "../../system/colors";
 import {Box, Button, Dialog, DialogTitle} from "@mui/material";
 import {PeopleResponse} from "../../model/PeopleResponse";
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, SetStateAction} from "react";
 import {DepartmentResponse} from "../../model/DepartmentResponse";
 import {ArrowBack, PersonSearch} from "@mui/icons-material";
 import {FilterForm} from "../../model/FilterForm";
-import usePeopleSearch from "../../hooks/usePeopleSearch";
-import usePeople from "../../hooks/usePeople";
 import {usePeopleContext} from "../../context/PeopleContext";
 
 interface PeopleFilterFormProps {

@@ -9,6 +9,7 @@ import {PeopleResponse} from "../../model/PeopleResponse";
 import {components, CSSObjectWithLabel, default as ReactSelect} from "react-select";
 import ApiClient from "../../services/ApiClient";
 import {AxiosError} from "axios";
+import {isValidEmail, isValidPhoneNumber} from "../../services/validationService";
 
 interface AddOrEditPeopleDialogProps {
     setPeople: Dispatch<SetStateAction<PeopleResponse[]>>,
@@ -40,14 +41,6 @@ const reactSelectStyles = (baseStyles: CSSObjectWithLabel) => ({
     borderColor: COLORS.GREEN,
 })
 
-const isValidEmail = (email:string) => {
-    return email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
-}
-
-const isValidPhoneNumber = (phoneNumber:string) => {
-    return phoneNumber.match(/^(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/);
-}
-
 const isValidForm = (person: PeopleResponse) => {
     return person.name.length > 0 && isValidEmail(person.email) && isValidPhoneNumber(person.phoneNumber);
 }
@@ -68,7 +61,7 @@ const addPerson = (person: PeopleResponse,
                 setOpen(false);
                 return newState;
             });
-            return 'People added succesfully';
+            return 'People added successfully';
         },
         error: (error:AxiosError) => {
             if (error.response?.status === 409) return `User with ${person.email} already exists.`;
